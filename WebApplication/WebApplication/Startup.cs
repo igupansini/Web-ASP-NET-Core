@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
+using WebApplication.Services;
 
 namespace WebApplication
 {
@@ -40,6 +41,7 @@ namespace WebApplication
                     options.UseMySql(Configuration.GetConnectionString("WebApplicationContext"), builder => builder.MigrationsAssembly("WebApplication")));
 
             services.AddScoped<SeedingService>();
+            services.AddScoped<VendedorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
