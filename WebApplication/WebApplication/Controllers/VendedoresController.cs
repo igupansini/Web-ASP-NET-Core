@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -45,14 +46,14 @@ namespace WebApplication.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { msg = "Id não informado."});
             }
 
             var obj = _vendedorService.FindById(id.Value);
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { msg = "Id não encontrado." });
             }
 
             return View(obj);
@@ -70,14 +71,14 @@ namespace WebApplication.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { msg = "Id não informado." });
             }
 
             var obj = _vendedorService.FindById(id.Value);
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { msg = "Id não encontrado." });
             }
 
             return View(obj);
@@ -87,14 +88,14 @@ namespace WebApplication.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { msg = "Id não informado." });
             }
 
             var obj = _vendedorService.FindById(id.Value);
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { msg = "Id não encontrado." });
             }
 
             List<Departamento> departamentos = _departamentoService.FindAll();
@@ -108,21 +109,27 @@ namespace WebApplication.Controllers
         {
             if (id != vendedor.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { msg = "Id não corresponde." });
             }
             try
             {
                 _vendedorService.Update(vendedor);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (NotFoundException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { msg = e.Message });
             }
-            catch (DbConcurrencyException)
+            catch (DbConcurrencyException e)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { msg = e.Message });
             }
+        }
+
+        public IActionResult Error(string msg)
+        {
+            var viewModel = new ErrorViewModel { Msg = msg, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier};
+            return View(viewModel);
         }
     }
 }
