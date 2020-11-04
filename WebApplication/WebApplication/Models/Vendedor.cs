@@ -9,15 +9,22 @@ namespace WebApplication.Models
     public class Vendedor
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "{0} está vazio.")]
+        [StringLength(60, MinimumLength = 3, ErrorMessage = "O nome deve possuir entre 3 e 60 letras.")]
         public string Nome { get; set; }
 
+        [Required(ErrorMessage = "{0} está vazio.")]
+        [EmailAddress(ErrorMessage = "Digite um e-mail válido.")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "{0} está vazio.")]
         [Display(Name = "Salário")]
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public double SalarioBase { get; set; }
 
+        [Required(ErrorMessage = "{0} está vazio.")]
         [Display(Name = "Data de Nascimento")]
         [DataType(DataType.Date)]
         public DateTime DataNascimento { get; set; }
